@@ -4,6 +4,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 
 import Test.QuickCheck
+import Test.QuickCheck.Function (apply)
 import Data.List
 import Cp
 
@@ -121,9 +122,6 @@ find' f (x:xs) = case find' f xs of
 
 --a)
 
-findValid :: (a -> Bool) -> [a] -> Maybe a
-findValid f [] = Nothing
-findValid f (x:xs) = if f x then Just x else findValid f xs
 
 prop_similarFind :: [Int] -> Bool
 prop_similarFind = uncurry (==) . split (find even) (findValid even)
@@ -135,6 +133,18 @@ removePredicate f (h:t)= if f h then removePredicate f t else h : removePredicat
 prop_onlyValids :: [Int] -> Bool
 prop_onlyValids = uncurry (==) . split (findValid even) (findValid even . removePredicate odd)
 
+--b)
 
+findValid :: (a -> Bool) -> [a] -> Maybe a
+findValid f [] = Nothing
+findValid f (x:xs) = if f x then Just x else findValid f xs
+
+--c)
+
+prop_sameAsFindFunction :: Fun Int Bool -> [Int] -> Bool
+prop_sameAsFindFunction f = uncurry (==) . split (find (apply f) ) (findValid (apply f))
+
+
+-- to run all tests `Main> runTests`
 return []
 runTests = $quickCheckAll
