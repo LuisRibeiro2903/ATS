@@ -7,6 +7,9 @@ import Turma.Turma;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class TurmaTest {
@@ -31,9 +34,12 @@ class TurmaTest {
     @Test
     void getAlunoTest() {
         t.addAluno(a);
+        t.addAluno(b);
         try {
             Aluno r = t.getAluno("A00000");
             assertEquals(a, r, "Alfredo inserido e obtido de turma nao e igual ao original");
+            Aluno g = t.getAluno("A00001");
+            assertNotEquals(a, g, "Alunos considerados iguais quando não o são") ;
         }
         catch (AlunoInexistenteException e){
             fail("Turma.AlunoInexistenteException no teste getAlunoTest");
@@ -68,6 +74,10 @@ class TurmaTest {
             b.setNota("CG", 9);
             t.addAluno(b);
             assertTrue(t.reprovados().contains(b), "Nenhum aluno reprovado quando devia");
+            c.setNota("ATS", 10);
+            c.setNota("CG", 10);
+            t.addAluno(c);
+            assertFalse(t.reprovados().contains(c), "Aluno reprovado quando não devia");
 
         } catch (NotaInvalidaException e) {
             fail("Turma.NotaInvalidaException no teste reprovadosTest");
@@ -91,5 +101,22 @@ class TurmaTest {
         } catch (AlunoInexistenteException e) {
             fail("Turma.AlunoInexistenteException no teste removeAlunoTest");
         }
+    }
+
+    @Test
+    void setAlunosTest (){
+        List<Aluno> lista_de_alunos = new ArrayList<>();
+        lista_de_alunos.add(a);
+        lista_de_alunos.add(b);
+        lista_de_alunos.add(c);
+        t.setAlunos(lista_de_alunos);
+        try{
+            assertEquals(a, t.getAluno("A00000"));
+            assertEquals(b, t.getAluno("A00001"));
+            assertEquals(c, t.getAluno("A00002"));
+        } catch (AlunoInexistenteException e) {
+            fail();
+        }
+
     }
 }

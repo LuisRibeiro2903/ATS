@@ -24,8 +24,22 @@ class AlunoTest {
 
     @Test
     void setNotaTest() {
-        Assertions.assertThrows(NotaInvalidaException.class, () ->  a.setNota("ATS", 49), "Nota inválida aceite");
+        assertThrows(NotaInvalidaException.class, () ->  a.setNota("ATS", 49), "Nota inválida aceite");
         assertThrows(NotaInvalidaException.class, () ->  a.setNota("ATS", -620), "Nota inválida aceite");
+        try {
+            a.setNota("ATS", 20);
+            assertEquals(a.getNota("ATS"), 20, "Nota atual não corresponde á inserida por 'setNota', 20");
+            a.setNota("ATS", 0);
+            assertEquals(a.getNota("ATS"), 0, "Nota atual não corresponde á inserida por 'setNota', 0");
+        } catch (NotaInvalidaException e) {
+            fail("NotaInvalidaException no teste setNotaTes");
+        }
+    }
+
+    @Test
+    void equalsTest() {
+        assertEquals(a, a);
+        assertFalse(a.equals(2));
     }
 
     @Test

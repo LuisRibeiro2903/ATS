@@ -13,20 +13,8 @@ public class Turma {
         alunos = new ArrayList<>();
     }
 
-    public Turma(List<Aluno> novosAlunos){
-        this.setAlunos(novosAlunos);
-    }
-
-    public Turma (Turma t){
-        this(t.getAlunos());
-    }
-
     public void setAlunos(List<Aluno> novosAlunos){
         alunos = novosAlunos.stream().map(Aluno::clone).collect(Collectors.toList());
-    }
-
-    public List<Aluno> getAlunos(){
-        return alunos.stream().map(Aluno::clone).collect(Collectors.toList());
     }
 
     public void addAluno(Aluno a){
